@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>ランダムな犬</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    #dogImage {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 2px solid #ccc;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>今日の犬 🐾</h1>
+    <h2 id="breedName"></h2>
+    <img id="dogImage" src="" alt="犬の画像">
+  </main>
+
+  <script>
+    const breedName = document.getElementById("breedName");
+    const dogImage = document.getElementById("dogImage");
+
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then(response => response.json())
+      .then(data => {
+        const imageUrl = data.message;
+        dogImage.src = imageUrl;
+
+        // URLから犬種名を抽出
+        const breedMatch = imageUrl.match(/breeds\/([^\/]+)\//);
+        let breed = breedMatch ? breedMatch[1] : "不明";
+
+        // サブ犬種がある場合（例: hound-afghan）
+        breed = breed.replace("-", " ");
+
+        // 表示用に先頭を大文字に
+        breedName.textContent = `Dog Breed : ${breed.charAt(0).toUpperCase() + breed.slice(1)}`;
+      })
+      .catch(error => {
+        breedName.textContent = "犬の情報を取得できませんでした";
+        console.error("エラー:", error);
+      });
+  </script>
+</body>
+</html>
