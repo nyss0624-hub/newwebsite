@@ -35,7 +35,7 @@
   let pokemonNumber = Math.floor(Math.random() * 898) + 1;
  
   // PokéAPIからデータを取得し、名前と画像を表示
-  fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`)
+  fetch(`https://pokeapi.co/api/v2/pokemon-species/{id or name}/${pokemonNumber}`)
     .then(function (response) {
       // レスポンスをコンソールに出力
       console.log(response);
