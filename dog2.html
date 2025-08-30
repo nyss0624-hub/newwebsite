@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>今日の犬 🐾</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fefefe, #e0f7fa);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+    }
+
+    main.container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    #breedName {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #444;
+    }
+
+    #dogImage {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 2px solid #ccc;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #dogImage:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>今日の犬 🐾</h1>
+    <h2 id="breedName">読み込み中...</h2>
+    <img id="dogImage" src="" alt="犬の画像">
+  </main>
+
+  <script>
+    const breedName = document.getElementById("breedName");
+    const dogImage = document.getElementById("dogImage");
+
+    
+    
+
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then(response => response.json())
+      .then(data => {
+        const imageUrl = data.message;
+        dogImage.src = imageUrl;
+
+        // URLから犬種名を抽出
+        const breedMatch = imageUrl.match(/breeds\/([^\/]+)\//);
+        let breedKey = breedMatch ? breedMatch[1].split("-")[0].toLowerCase() : "unknown";
+
+        // 辞書から日本語名を取得
+        const breedInfo = breedDictionary[breedKey] || `Dog Breed ：${breedKey.charAt(0).toUpperCase() + breedKey.slice(1)}`;
+
+        breedName.textContent = breedInfo;
+      })
+      .catch(error => {
+        breedName.textContent = "犬の情報を取得できませんでした";
+        console.error("エラー:", error);
+      });
+  </script>
+</body>
+</html>
